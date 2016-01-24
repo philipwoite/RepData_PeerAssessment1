@@ -9,16 +9,61 @@ output:
 
 
 ## Loading and preprocessing the data
+The text file *"activity.csv"* was read using *read.csv*, and subsequently "NA" observations were removed using *complete.cases* to form the data frames **activity_complete** and **activity_day**. The data frame **activity_day** is a summary of **activity_complete**, taking the sum of the steps taken on each of the unique days in the data frame **activity_complete**.
 
+```{r}
+require('ggplot2')
 
+require('data.table')
+
+require('dplyr')
+
+require('tidyr')
+
+require('lubridate')
+
+require('doBy')
+
+activity <- read.csv('activity.csv', header=TRUE)
+activity_complete <- data.frame(activity[complete.cases(activity),])
+
+activity_day <- data.frame(summaryBy(steps ~ date ,data = activity_complete, FUN = list(sum)))
+```
 
 ## What is mean total number of steps taken per day?
+
+Then plotting a histogram
+
+```{r, echo=TRUE}
+qplot(activity_day$steps, geom = "histogram")
+```
+
+Evaluating the mean and median of the steps taken per day:
+
+```{r, echo=TRUE, eval=TRUE}
+mean_steps <- mean(activity_day$steps.sum, na.rm=TRUE)
+print(mean_steps)
+median_steps <- median(activity_day$steps.sum, na.rm=TRUE)
+print(median_steps)
+```
+
 
 
 
 ## What is the average daily activity pattern?
+A new data fram **activity_intervals** was created from the **activity_complete** data frame - again using *summaryBy* but now with the function being "mean" to take the average. This data is then plotted.
 
+```{r}
+activity_intervals <- data.frame(summaryBy(steps ~ interval, data = activity_complete , FUN = list(mean)))
 
+ggplot(activity_intervals, aes(interval, steps.mean))+ geom_line()
+```
+
+Finding the interval containing the maximum steps:
+
+```{r}
+max_interval <- which.max(activity_intervals[,2])
+print(activity_intervals[max_interval,])
 
 ## Imputing missing values
 
