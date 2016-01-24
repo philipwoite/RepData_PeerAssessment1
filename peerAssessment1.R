@@ -31,8 +31,13 @@ ggplot(activity_intervals, aes(interval, steps.mean))+ geom_line()
 # Between 0800 and 0900 in the morning
 my_filler <- function(x) {if activity[,steps] == Na {activity[,steps] <- activity_intervals[,steps.mean]}
   
-activity_filled <- lapply(activity, ffunction(x) {if activity[,steps] == Na {activity[,steps] <- activity_intervals[,steps.mean]})
+activity_filled <- lapply(activity, function(x) {if (activity$steps == NA) {activity$steps <- activity_intervals$steps.mean}})
 
+activity_filled <- apply(activity, function(x) {if (steps == NA) {steps <- activity_interval[x,steps.mean]}})
+
+activity_filled <- activity
+
+activity_filled$steps <- ifelse(is.na(activity_filled$steps) == TRUE, activity_intervals$steps.mean, activity_filled$steps)
 
 ecode <- function(x, search, replace, default = NULL) {
   

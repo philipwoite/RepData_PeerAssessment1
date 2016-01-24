@@ -64,9 +64,46 @@ Finding the interval containing the maximum steps:
 ```{r}
 max_interval <- which.max(activity_intervals[,2])
 print(activity_intervals[max_interval,])
+```
 
 ## Imputing missing values
+The number of missing values in *steps* in the **activity** data frame:
 
+```{r}
+missing_steps <- sum(is.na(activity$steps))
+print(missing_steps)
+```
 
+To imput missing values, it was chosen to substitute *NA* values with the mean value in the interval of each of the *NA* values.
+
+```{r}
+activity_filled <- activity
+
+activity_filled$steps <- ifelse(is.na(activity_filled$steps) == TRUE, activity_intervals$steps.mean, activity_filled$steps)
+
+activity_filled_day <- data.frame(summaryBy(steps ~ date ,data = activity_filled, FUN = list(sum)))
+
+```
+
+Plotting and calculating the mean and median of the **activity_filled_day** data frame:
+
+```{r, echo=TRUE}
+qplot(activity_filled_day$steps, geom = "histogram")
+```
+
+Evaluating the mean and median of the steps taken per day:
+
+```{r, echo=TRUE, eval=TRUE}
+mean_filled_steps <- mean(activity_filled_day$steps.sum, na.rm=TRUE)
+print(mean_filled_steps)
+median_filled_steps <- median(activity_filled_day$steps.sum, na.rm=TRUE)
+print(median_filled_steps)
+```
+
+The mean and median totals calculated now and in the earlier section differ. This difference may be ascribed to the substitution of average values skewing the median to the average. The second difference that was observed is that the mean and median values are now the same.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+```{r}
+activity_weekdays <- mutate(activity_filled_day, my_weekday = factor(weekdays(as.POSIXct(activity_filled_day$date))))
+
