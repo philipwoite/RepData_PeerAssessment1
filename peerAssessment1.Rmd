@@ -105,5 +105,12 @@ The mean and median totals calculated now and in the earlier section differ. Thi
 ## Are there differences in activity patterns between weekdays and weekends?
 
 ```{r}
-activity_weekdays <- mutate(activity_filled_day, my_weekday = factor(weekdays(as.POSIXct(activity_filled_day$date))))
+activity_weekdays <- data.frame(mutate(activity_filled_day, 
+                            my_weekday = factor(weekdays(as.POSIXct(activity_filled_day$date)),
+                            levels= c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))))
 
+with(activity_weekdays, my_weekday[activity_weekdays$my_weekday %in% c('Monday','Tuesday','Wednesday','Thursday','Friday')])
+
+with(activity_weekdays, my_weekday[activity_weekdays$my_weekday %in% c('Saturday','Sunday')], plot(date,steps.sum))
+
+```
