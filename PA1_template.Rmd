@@ -113,4 +113,12 @@ with(activity_weekdays, my_weekday[activity_weekdays$my_weekday %in% c('Monday',
 
 with(activity_weekdays, my_weekday[activity_weekdays$my_weekday %in% c('Saturday','Sunday')], plot(date,steps.sum))
 
+require('lattice')
+
+xyplot(date ~ steps.sum | c(activity_weekdays$my_weekday[activity_weekdays$my_weekday %in% c('Monday','Tuesday','Wednesday','Thursday','Friday')], activity_weekdays$my_weekday[activity_weekdays$my_weekday %in% c('Saturday','Sunday')]), data = activity_weekdays, layout = c(2,2))
+
+xyplot(date ~ steps.sum | c(activity_weekdays$my_weekday %in% c('Monday','Tuesday','Wednesday','Thursday','Friday'), activity_weekdays$my_weekday %in% c('Saturday','Sunday')), data = activity_weekdays, layout = c(1,2))
+
+xyplot(steps.sum ~ date | c(activity_weekdays$my_weekday %in% c('Monday','Tuesday','Wednesday','Thursday','Friday'), activity_weekdays$my_weekday %in% c('Saturday','Sunday')), data = activity_weekdays, layout = c(1,2))
+
 ```
