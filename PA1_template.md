@@ -88,6 +88,14 @@ require('doBy')
 ```
 
 ```r
+require('lattice')
+```
+
+```
+## Loading required package: lattice
+```
+
+```r
 activity <- read.csv('activity.csv', header=TRUE)
 activity_complete <- data.frame(activity[complete.cases(activity),])
 
@@ -226,27 +234,9 @@ activity_weekdays <- data.frame(mutate(activity_filled_day,
                             my_weekday = factor(weekdays(as.POSIXct(activity_filled_day$date)),
                             levels= c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))))
 
-with(activity_weekdays, my_weekday[activity_weekdays$my_weekday %in% c('Monday','Tuesday','Wednesday','Thursday','Friday')])
+xyplot(steps.sum ~ date | c(activity_weekdays$my_weekday %in% c('Monday','Tuesday','Wednesday','Thursday','Friday'), activity_weekdays$my_weekday %in% c('Saturday','Sunday')), data = activity_weekdays, layout = c(1,2))
 ```
 
-```
-##  [1] Monday    Tuesday   Wednesday Thursday  Friday    Monday    Tuesday  
-##  [8] Wednesday Thursday  Friday    Monday    Tuesday   Wednesday Thursday 
-## [15] Friday    Monday    Tuesday   Wednesday Thursday  Friday    Monday   
-## [22] Tuesday   Wednesday Thursday  Friday    Monday    Tuesday   Wednesday
-## [29] Thursday  Friday    Monday    Tuesday   Wednesday Thursday  Friday   
-## [36] Monday    Tuesday   Wednesday Thursday  Friday    Monday    Tuesday  
-## [43] Wednesday Thursday  Friday   
-## Levels: Sunday Monday Tuesday Wednesday Thursday Friday Saturday
-```
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
-```r
-with(activity_weekdays, my_weekday[activity_weekdays$my_weekday %in% c('Saturday','Sunday')], plot(date,steps.sum))
-```
-
-```
-##  [1] Saturday Sunday   Saturday Sunday   Saturday Sunday   Saturday
-##  [8] Sunday   Saturday Sunday   Saturday Sunday   Saturday Sunday  
-## [15] Saturday Sunday  
-## Levels: Sunday Monday Tuesday Wednesday Thursday Friday Saturday
-```
+There is a difference in the activity patterns between weekdays and weekends. There is much less variance in activity on weekends. In the plo, "TRUE" represents weekdays, and "FALSE" represents weekends.

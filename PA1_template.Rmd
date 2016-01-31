@@ -24,6 +24,8 @@ require('lubridate')
 
 require('doBy')
 
+require('lattice')
+
 activity <- read.csv('activity.csv', header=TRUE)
 activity_complete <- data.frame(activity[complete.cases(activity),])
 
@@ -109,16 +111,10 @@ activity_weekdays <- data.frame(mutate(activity_filled_day,
                             my_weekday = factor(weekdays(as.POSIXct(activity_filled_day$date)),
                             levels= c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))))
 
-with(activity_weekdays, my_weekday[activity_weekdays$my_weekday %in% c('Monday','Tuesday','Wednesday','Thursday','Friday')])
-
-with(activity_weekdays, my_weekday[activity_weekdays$my_weekday %in% c('Saturday','Sunday')], plot(date,steps.sum))
-
-require('lattice')
-
-xyplot(date ~ steps.sum | c(activity_weekdays$my_weekday[activity_weekdays$my_weekday %in% c('Monday','Tuesday','Wednesday','Thursday','Friday')], activity_weekdays$my_weekday[activity_weekdays$my_weekday %in% c('Saturday','Sunday')]), data = activity_weekdays, layout = c(2,2))
-
-xyplot(date ~ steps.sum | c(activity_weekdays$my_weekday %in% c('Monday','Tuesday','Wednesday','Thursday','Friday'), activity_weekdays$my_weekday %in% c('Saturday','Sunday')), data = activity_weekdays, layout = c(1,2))
-
 xyplot(steps.sum ~ date | c(activity_weekdays$my_weekday %in% c('Monday','Tuesday','Wednesday','Thursday','Friday'), activity_weekdays$my_weekday %in% c('Saturday','Sunday')), data = activity_weekdays, layout = c(1,2))
 
+
+
 ```
+
+There is a difference in the activity patterns between weekdays and weekends. There is much less variance in activity on weekends. In the plo, "TRUE" represents weekdays, and "FALSE" represents weekends.
